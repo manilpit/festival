@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="utf-8"/>
+    <title>Kartverkskart</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
+        <style>
+            #map {height: 800px;
+                width: 600px }
+        </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folkefesten 2025</title>
+    <style>
+        /* Grunnleggende stiler */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: #e74c3c; /* Red tone */
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Navigasjon */
+        nav {
+            background-color: #c0392b; /* Darker red tone */
+            padding: 10px 0;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li {
+            margin: 5px 15px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            color: #f1c40f; /* Gold accent */
+        }
+        
+        /* Hovedinnhold */
+        main {
+            padding: 40px 0;
+        }
+        
+        section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        section h2 {
+            color: #c0392b; /* Darker red tone */
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f1c40f; /* Gold accent */
+            padding-bottom: 10px;
+        }
+        
+        /* Program */
+        .program-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .program-item:last-child {
+            border-bottom: none;
+        }
+        
+        .program-item h3 {
+            color: #e74c3c; /* Red tone */
+            margin-bottom: 10px;
+        }
+        
+        .program-time {
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+        
+        /* Kart og lokasjon */
+        .map-container {
+            height: 300px;
+            background-color: #eee;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        
+        /* Kontaktskjema */
+        form {
+            display: grid;
+            gap: 15px;
+        }
+        
+        input, textarea, button {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 150px;
+        }
+        
+        button {
+            background-color: #e74c3c; /* Red tone */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #c0392b; /* Darker red tone */
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #302f30; /* Optional complementary color */
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        /* Gjør nettsiden responsiv */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+        }
+        
+        /* Tabsystem for sider */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+
+        #map {
+            height: 400px; /* Juster høyden etter behov */
+            width: 100%; /* Gjør kartet responsivt */
+            margin: 20px 0; /* Legg til litt avstand rundt kartet */
+        }
+
+        .map-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>FOLKEFESTEN 2025</h1>
+            <p>En fantastisk opplevelse for hele familien!</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#hjem" class="tab-link active" data-tab="hjem">Hjem</a></li>
+                <li><a href="#program" class="tab-link" data-tab="program">Program</a></li>
+                <li><a href="#tid-sted" class="tab-link" data-tab="tid-sted">Tid & Sted</a></li>
+                <li><a href="#kontakt" class="tab-link" data-tab="kontakt">Kontakt</a></li>
+                <li><a href="#om" class="tab-link" data-tab="om">Om Festivalen</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <!-- Hjemside -->
+        <section id="hjem" class="tab-content active">
+            <h2>Velkommen til Folkefesten 2025!</h2>
+            <p>Folkefesten 2025 er årets største kulturbegivenhet i vårt lokalsamfunn. Vi inviterer alle til å delta i en helg fylt med musikk, mat, kunst og underholdning for alle aldersgrupper.</p>
+            <p>Årets tema: <strong>"Sammen for fremtiden"</strong></p>
+            <div style="margin: 30px 0;">
+                <h3>Høydepunkter:</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Konserter med lokale og nasjonale artister</li>
+                    <li>Matfestival med det beste fra lokale produsenter</li>
+                    <li>Kunstutstillinger og workshops</li>
+                    <li>Barneaktiviteter og familieunderholdning</li>
+                    <li>Kulturelle innslag fra hele verden</li>
+                </ul>
+            </div>
+            <p>Sett av datoen og bli med på årets festligste helg!</p>
+        </section>
+        
+        <!-- Programside -->
+        <section id="program" class="tab-content">
+            <h2>Program for Folkefesten 2025</h2>
+            
+            <h3 style="margin-top: 20px;">Fredag 15. august</h3>
+            <div class="program-item">
+                <h3>Åpningsseremoni</h3>
+                <p class="program-time">16:00 - 17:00 | Hovedscenen</p>
+                <p>Offisiell åpning av festivalen med taler og musikalske innslag.</p>
+            </div>
+            <div class="program-item">
+                <h3>Konsert: Lokale Talenter</h3>
+                <p class="program-time">18:00 - 20:00 | Hovedscenen</p>
+                <p>Opplev de beste lokale musikerne og bandene.</p>
+            </div>
+            <div class="program-item">
+                <h3>Kveldskonsert: Festivalbandet</h3>
+                <p class="program-time">21:00 - 23:00 | Hovedscenen</p>
+                <p>Dansbar musikk og feststemning utover kvelden.</p>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Lørdag 16. august</h3>
+            <div class="program-item">
+                <h3>Barnas dag</h3>
+                <p class="program-time">10:00 - 14:00 | Barneland</p>
+                <p>Aktiviteter, teater og moro for de minste.</p>
+            </div>
+            <div class="program-item">
+                <h3>Matfestival</h3>
+                <p class="program-time">12:00 - 20:00 | Matområdet</p>
+                <p>Smak på lokale spesialiteter og internasjonale retter.</p>
+            </div>
+            <div class="program-item">
+                <h3>Hovedkonsert</h3>
+                <p class="program-time">20:00 - 23:00 | Hovedscenen</p>
+                <p>Årets store høydepunkt med nasjonale artister.</p>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Søndag 17. august</h3>
+            <div class="program-item">
+                <h3>Kulturdag</h3>
+                <p class="program-time">11:00 - 15:00 | Hele området</p>
+                <p>Utstillinger, dans og kulturelle innslag fra hele verden.</p>
+            </div>
+            <div class="program-item">
+                <h3>Avslutningskonsert</h3>
+                <p class="program-time">16:00 - 18:00 | Hovedscenen</p>
+                <p>Vi avslutter festivalen med lokale og nasjonale artister.</p>
+            </div>
+        </section>
+        
+        <!-- Tid og Sted -->
+        <section id="tid-sted" class="tab-content">
+            <h2>Tid og Sted</h2>
+            
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+            
+            <h3>Festivaldatoer</h3>
+            <p><strong>15.-17. august 2025</strong></p>
+            
+            <h3 style="margin-top: 20px;">Åpningstider</h3>
+            <p>Fredag: 16:00 - 00:00<br>
+            Lørdag: 10:00 - 00:00<br>
+            Søndag: 11:00 - 19:00</p>
+            
+            <h3 style="margin-top: 20px;">Lokasjon</h3>
+            <p>Byparken<br>
+            Festivalveien 1<br>
+            0000 Festivalby</p>
+            
+            <h3 style="margin-top: 20px;">Hvordan komme dit</h3>
+            <p><strong>Med kollektivtransport:</strong><br>
+            Buss 10, 12 og 15 stopper ved "Byparken" holdeplass.<br>
+            Tog til Festivalby stasjon (10 minutters gange til festivalområdet).</p>
+            
+            <p><strong>Med bil:</strong><br>
+            Begrenset parkeringsmuligheter ved Byparken P-hus.<br>
+            Vi oppfordrer til å bruke kollektivtransport eller sykle.</p>
+        </section>
+        
+        <!-- Kontaktside -->
+        <section id="kontakt" class="tab-content">
+            <h2>Kontakt Oss</h2>
+            
+            <p>Har du spørsmål om Folkefesten? Ta gjerne kontakt med oss!</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+                <div>
+                    <h3>Kontaktinformasjon</h3>
+                    <p style="margin-top: 15px;">
+                        <strong>E-post:</strong> info@folkefesten.no<br>
+                        <strong>Telefon:</strong> 123 45 678<br><br>
+                        
+                        <strong>Festivalkontor:</strong><br>
+                        Kulturhuset<br>
+                        Kulturveien 5<br>
+                        0000 Festivalby<br><br>
+                        
+                        <strong>Åpningstider kontor:</strong><br>
+                        Mandag-fredag: 10:00-16:00
+                    </p>
+                </div>
+                
+                <div>
+                    <h3>Send melding</h3>
+                    <form id="contact-form" style="margin-top: 15px;">
+                        <input type="text" placeholder="Ditt navn" required>
+                        <input type="email" placeholder="Din e-post" required>
+                        <input type="text" placeholder="Emne">
+                        <textarea placeholder="Din melding" required></textarea>
+                        <button type="submit">Send melding</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Om Festivalen -->
+        <section id="om" class="tab-content">
+            <h2>Om Folkefesten</h2>
+            
+            <p>Folkefesten ble startet i 2010 som en liten lokal begivenhet, og har siden vokst til å bli en av regionens mest populære kulturfestivaler. Vi ønsker å samle mennesker fra alle samfunnslag og aldersgrupper for å feire kultur, musikk og fellesskap.</p>
+            
+            <h3 style="margin-top: 30px;">Vår visjon</h3>
+            <p>Å skape en inkluderende festival som fremmer kulturell forståelse, lokal stolthet og bærekraftig fellesskap.</p>
+            
+            <h3 style="margin-top: 20px;">Verdigrunnlag</h3>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>Inkludering:</strong> Vi ønsker at alle skal føle seg velkomne og verdsatte.</li>
+                <li><strong>Bærekraft:</strong> Vi jobber aktivt for å redusere festivalens miljøpåvirkning.</li>
+                <li><strong>Kulturelt mangfold:</strong> Vi feirer ulike kulturelle uttrykk og tradisjoner.</li>
+                <li><strong>Lokal forankring:</strong> Vi støtter lokale kunstnere, produsenter og næringsliv.</li>
+            </ul>
+            
+            <h3 style="margin-top: 20px;">Organisasjonen</h3>
+            <p>Folkefesten arrangeres av Folkefesten AS, et selskap eid av Kulturstiftelsen i samarbeid med lokale foreninger og frivillige. Hvert år bidrar over 200 frivillige til å gjøre festivalen mulig.</p>
+            
+            <h3 style="margin-top: 20px;">Bli frivillig</h3>
+            <p>Ønsker du å bli en del av Folkefesten-teamet? Vi trenger alltid engasjerte frivillige! Send en e-post til frivillig@folkefesten.no for mer informasjon.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Folkefesten. Alle rettigheter reservert.</p>
+            <p style="margin-top: 10px;">Følg oss på sosiale medier: Facebook | Instagram | Twitter</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Enkel navigasjon mellom tabs/sider
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabLinks = document.querySelectorAll('.tab-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            let map; // Variabel for Leaflet-kartet
+
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Fjern aktiv klasse fra alle tabs og innhold
+                    tabLinks.forEach(link => link.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    // Legg til aktiv klasse på valgt tab og innhold
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    const activeTab = document.getElementById(tabId);
+                    activeTab.classList.add('active');
+
+                    // Hvis "Tid og Sted"-taben aktiveres, oppdater kartet
+                    if (tabId === 'tid-sted' && map) {
+                        setTimeout(() => {
+                            map.invalidateSize(); // Sørg for at kartet rendres riktig
+                        }, 200); // Forsinkelse for å sikre at taben er ferdig synlig
+                    }
+                });
+            });
+
+            // Håndter kontaktskjema
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Takk for din henvendelse! Vi vil kontakte deg så snart som mulig.');
+                    contactForm.reset();
+                });
+            }
+
+            // Initialize Leaflet map
+            const mapElement = document.getElementById('map');
+            if (mapElement) {
+                map = L.map('map').setView([60.14, 10.25], 13); // Juster koordinater og zoomnivå
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                // Legg til en markør
+                L.marker([59.923954, 10.752496]).addTo(map)
+                    .bindPopup('Festivalområdet')
+                    .openPopup();
+            }
+        });
+    </script>
+</body>
+</html>
