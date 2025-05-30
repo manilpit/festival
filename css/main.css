@@ -1,0 +1,30 @@
+:root {
+    --color-purple: #7f61b2;
+    --color-yellow: #feb100;
+    --color-pink: #ed96bb;
+    --color-light-pink: #ffddda;
+    --color-red: #fb5238;
+    --color-green: #96c34d;
+    --color-dark: #160d24;
+    --color-cream: #f4efde;
+    --color-white: #ffffff;
+}
+
+/* [All previous CSS except media queries and animations] */
+
+/* Animations */
+@keyframes sparkle {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.sparkle {
+    animation: sparkle 2s infinite;
+}
+
+/* Organization item hover effects */
+.org-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}

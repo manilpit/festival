@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="utf-8"/>
+    <title>FANFARE - Fellesskap mot fascisme</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
+    <style>
+        /* Grunnleggende stiler */
+        :root {
+            --color-purple: #7f61b2;
+            --color-yellow: #feb100;
+            --color-pink: #ed96bb;
+            --color-light-pink: #ffddda;
+            --color-red: #fb5238;
+            --color-green: #96c34d;
+            --color-dark: #160d24;
+            --color-cream: #f4efde;
+            --color-white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-cream);
+            color: var(--color-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* Header og Hero */
+        header {
+            background: var(--color-dark);
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .logo-container {
+            max-width: 300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .hero-section {
+            background: linear-gradient(45deg, var(--color-yellow), var(--color-pink), var(--color-purple));
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: url('fanfare-banner.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--color-dark);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Dekorative elementer */
+        .decorative-element {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+
+        .maracas {
+            top: 20px;
+            right: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .watermelon {
+            bottom: 20px;
+            left: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .peace-hand {
+            bottom: 20px;
+            right: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Navigasjon */
+        nav {
+            background-color: var(--color-purple);
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        nav ul li a {
+            color: var(--color-white);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
+            transform: translateY(-2px);
+        }<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="utf-8"/>
+    <title>FANFARE - Fellesskap mot fascisme</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
+    <style>
+        /* Grunnleggende stiler */
+        :root {
+            --color-purple: #7f61b2;
+            --color-yellow: #feb100;
+            --color-pink: #ed96bb;
+            --color-light-pink: #ffddda;
+            --color-red: #fb5238;
+            --color-green: #96c34d;
+            --color-dark: #160d24;
+            --color-cream: #f4efde;
+            --color-white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-cream);
+            color: var(--color-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* Header og Hero */
+        header {
+            background: var(--color-dark);
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .logo-container {
+            max-width: 300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .hero-section {
+            background: linear-gradient(45deg, var(--color-yellow), var(--color-pink), var(--color-purple));
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--color-dark);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigasjon */
+        nav {
+            background-color: var(--color-purple);
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        nav ul li a {
+            color: var(--color-white);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Hovedinnhold */
+        main {
+            padding: 40px 0;
+        }
+        
+        section {
+            background-color: var(--color-white);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--color-red), var(--color-yellow), var(--color-green));
+        }
+        
+        section h2 {
+            color: var(--color-red);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            position: relative;
+        }
+
+        /* Dekorative elementer */
+        .decorative-element {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 1;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .decorative-element:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .maracas {
+            top: 20px;
+            right: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .watermelon {
+            bottom: 20px;
+            left: 20px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .peace-hand {
+            bottom: 20px;
+            right: 20px;
+            animation: float 3.5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Knapper */
+        button {
+            background-color: var(--color-red);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Form elementer */
+        input, textarea {
+            background-color: var(--color-cream);
+            border: 2px solid var(--color-purple);
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--color-yellow);
+            box-shadow: 0 0 0 3px rgba(254, 177, 0, 0.1);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--color-dark);
+            color: var(--color-light-pink);
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+        }
+        
+        /* Kart */
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 3px solid var(--color-purple);
+        }
+
+        /* Tab system */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block !important;
+        }
+
+        /* Responsivt design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .logo-container {
+                max-width: 200px;
+            }
+
+            .decorative-element {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img src="fanfare.jpeg" alt="FANFARE - Fellesskap mot fascisme">
+            </div>
+        </div>
+    </header>
+
+    <div class="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1>BLI MED PÅ FEST FOR FELLESSKAPET!</h1>
+        </div>
+        <div class="decorative-element maracas"></div>
+        <div class="decorative-element watermelon"></div>
+        <div class="decorative-element peace-hand"></div>
+    </div>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#hjem" class="tab-link active" data-tab="hjem">Hjem</a></li>
+                <li><a href="#program" class="tab-link" data-tab="program">Program</a></li>
+                <li><a href="#tid-sted" class="tab-link" data-tab="tid-sted">Tid & Sted</a></li>
+                <li><a href="#kontakt" class="tab-link" data-tab="kontakt">Kontakt</a></li>
+                <li><a href="#om" class="tab-link" data-tab="om">Om Festivalen</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <!-- Hjemside -->
+        <section id="hjem" class="tab-content active">
+            <h2>Velkommen til FANFARE!</h2>
+            
+            <div style="margin: 30px 0;">
+                <p>FANFARE! FEST FOR FELLESSKAP OG MOT FASCISME lages for å skape en arena og samlingspunkt for motstanden mot framveksten av og økende angrep fra autoritære fascistiske krefter i USA og Europa. Men også for å feire det rike mangfoldet og fellesskapet vi har. Det å minne om hva det er vi kjemper for er vårt viktigste middel mot fascismen.</p>
+                
+                <p style="margin-top: 20px;">Dagen vil fylles med:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Musikk</li>
+                    <li>Foredrag</li>
+                    <li>Standup</li>
+                    <li>Panelsamtaler</li>
+                    <li>Poesi</li>
+                    <li>Live podcast</li>
+                    <li>Kunst</li>
+                    <li>Ansiktsmaling</li>
+                    <li>God mat</li>
+                    <li>Art build</li>
+                    <li>Fine aktiviteter for barna</li>
+                </ul>
+                
+                <p style="margin-top: 20px;"><strong>Programmet slippes snart - inntil videre: Hold av dagen!</strong></p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h3>Velkommen til folkefest!</h3>
+                <p>Sterke fellesskap er limet for et godt samfunn. Fellesskapet vårt er under press nå som høyreradikale, antidemokratiske krefter er på fremvekst i verden. De har fått fotfeste i parlamenter og presidentstoler i flere land, ideene forerer i ulike grupperinger og på digitale plattformer. Kreftene splitter oss fra hverandre og utfordrer demokratiet.</p>
+                
+                <p style="margin-top: 15px;">Vi ser tydelige likhetstrekk internasjonalt mellom hendelser fra 1930-tallets framvekst av fascismen og det som skjer i dag, hvor noen få gradvis tar makt og frihet fra fellesskapet.</p>
+            </div>
+        </section>
+        
+        <!-- [Resten av seksjonene fortsetter som før...] -->
+        
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 FANFARE - Fellesskap mot fascisme. Alle rettigheter reservert.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabLinks = document.querySelectorAll('.tab-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            let map;
+
+            function setActiveTab(activeTabId) {
+                tabLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    content.style.display = 'none';
+                });
+
+                const activeTab = document.getElementById(activeTabId);
+                const activeLink = document.querySelector(`[data-tab="${activeTabId}"]`);
+                
+                if (activeTab && activeLink) {
+                    activeTab.classList.add('active');
+                    activeTab.style.display = 'block';
+                    activeLink.classList.add('active');
+
+                    if (activeTabId === 'tid-sted' && map) {
+                        setTimeout(() => {
+                            map.invalidateSize();
+                        }, 200);
+                    }
+                }
+            }
+
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    setActiveTab(tabId);
+                    window.scrollTo({
+                        top: document.querySelector('main').offsetTop,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Takk for din henvendelse! Vi vil kontakte deg så snart som mulig.');
+                    contactForm.reset();
+                });
+            }
+
+            const mapElement = document.getElementById('map');
+            if (mapElement) {
+                map = L.map('map').setView([59.923954, 10.752496], 13);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                L.marker([59.923954, 10.752496]).addTo(map)
+                    .bindPopup('Kubaparken')
+                    .openPopup();
+            }
+
+            function handleHash() {
+                const hash = window.location.hash.substring(1);
+                if (hash && document.getElementById(hash)) {
+                    setActiveTab(hash);
+                } else {
+                    setActiveTab('hjem');
+                }
+            }
+
+            window.addEventListener('hashchange', handleHash);
+            handleHash();
+        });
+    </script>
+</body>
+</html>
