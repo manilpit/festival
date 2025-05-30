@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="utf-8"/>
+    <title>FANFARE - Fellesskap mot fascisme</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
+    <style>
+        /* Grunnleggende stiler */
+        :root {
+            --color-purple: #7f61b2;
+            --color-yellow: #feb100;
+            --color-pink: #ed96bb;
+            --color-light-pink: #ffddda;
+            --color-red: #fb5238;
+            --color-green: #96c34d;
+            --color-dark: #160d24;
+            --color-cream: #f4efde;
+            --color-white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-cream);
+            color: var(--color-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        /* Header - oppdater denne delen i CSS-seksjonen */
+        header {
+            background-color: var(--color-light-pink); /* Endret fra var(--color-dark) */
+            padding: 40px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            max-width: 500px; /* Økt fra 300px for større logo */
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px; /* Legger til avrundede hjørner hvis ønskelig */
+        }        
+        /* Dekorative elementer */
+        .decorative-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: var(--color-yellow);
+            font-size: 1.5rem;
+        }
+        
+        /* Navigasjon */
+        nav {
+            background-color: var(--color-purple);
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        nav ul li a {
+            color: var(--color-white);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
+        }
+        
+        /* Hovedinnhold */
+        main {
+            padding: 40px 0;
+        }
+        
+        section {
+            background-color: var(--color-white);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--color-red), var(--color-yellow), var(--color-green));
+        }
+        
+        section h2 {
+            color: var(--color-red);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            position: relative;
+        }
+        
+        /* Knapper */
+        button {
+            background-color: var(--color-red);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Form elementer */
+        input, textarea {
+            background-color: var(--color-cream);
+            border: 2px solid var(--color-purple);
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--color-yellow);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--color-dark);
+            color: var(--color-light-pink);
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+        }
+        
+        /* Kart */
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 3px solid var(--color-purple);
+        }
+
+        /* Responsivt design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .logo-container {
+                max-width: 200px;
+            }
+        }
+        
+        /* Animasjoner */
+        @keyframes sparkle {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .sparkle {
+            animation: sparkle 2s infinite;
+        }
+        /* Endre tab-content stilen */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block !important; /* Legg til !important for å sikre at den overstyrer display: none */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <!-- Her skal logobildet settes inn -->
+                <img src="fanfare_banner.jpeg" alt="FANFARE - Fellesskap mot fascisme">
+            </div>
+        </div>
+    </header>
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#hjem" class="tab-link active" data-tab="hjem">Hjem</a></li>
+                <li><a href="#program" class="tab-link" data-tab="program">Program</a></li>
+                <li><a href="#tid-sted" class="tab-link" data-tab="tid-sted">Tid & Sted</a></li>
+                <li><a href="#kontakt" class="tab-link" data-tab="kontakt">Kontakt</a></li>
+                <li><a href="#om" class="tab-link" data-tab="om">Om Festivalen</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <!-- Hjemside -->
+        <section id="hjem" class="tab-content active">
+            <h2>BLI MED PÅ FEST FOR FELLESSKAPET!</h2>
+            
+            <div style="margin: 30px 0;">
+                <p>FANFARE! FEST FOR FELLESSKAP OG MOT FASCISME lages for å skape en arena og samlingspunkt for motstanden mot framveksten av og økende angrep fra autoritære fascistiske krefter i USA og Europa. Men også for å feire det rike mangfoldet og fellesskapet vi har. Det å minne om hva det er vi kjemper for er vårt viktigste middel mot fascismen.</p>
+                
+                <p style="margin-top: 20px;">Dagen vil fylles med:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Musikk</li>
+                    <li>Foredrag</li>
+                    <li>Standup</li>
+                    <li>Panelsamtaler</li>
+                    <li>Poesi</li>
+                    <li>Live podcast</li>
+                    <li>Kunst</li>
+                    <li>Ansiktsmaling</li>
+                    <li>God mat</li>
+                    <li>Art build</li>
+                    <li>Fine aktiviteter for barna</li>
+                </ul>
+                
+                <p style="margin-top: 20px;"><strong>Programmet slippes snart - inntil videre: Hold av dagen!</strong></p>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h3>Velkommen til folkefest!</h3>
+                <p>Sterke fellesskap er limet for et godt samfunn. Fellesskapet vårt er under press nå som høyreradikale, antidemokratiske krefter er på fremvekst i verden. De har fått fotfeste i parlamenter og presidentstoler i flere land, ideene forerer i ulike grupperinger og på digitale plattformer. Kreftene splitter oss fra hverandre og utfordrer demokratiet.</p>
+                
+                <p style="margin-top: 15px;">Vi ser tydelige likhetstrekk internasjonalt mellom hendelser fra 1930-tallets framvekst av fascismen og det som skjer i dag, hvor noen få gradvis tar makt og frihet fra fellesskapet.</p>
+            </div>
+        </section>
+        
+        <!-- Programside -->
+        <section id="program" class="tab-content">
+            <h2>Program</h2>
+            
+            <p>Når vi ser disse likhetstrekkene må vi sammen stille oss noen viktige spørsmål: Hvordan viser vi motstand mot disse kreftene før de får fotfeste i vårt eget samfunn? Hvordan tar vi vare på fellesskapet, mangfoldet og ytringsfriheten her i Norge, når det er i press internasjonalt?</p>
+            
+            <p style="margin-top: 20px;">Det er disse spørsmålene vi stiller i ulike format i Kubaparken denne dagen. Det blir en dag fylt med samtaler med noen av våre skarpeste hoder - på tvers av politiske skillelinjer og fagfelt, musikk, standup, workshops, og aktiviteter for store og små.</p>
+            
+            <p style="margin-top: 20px;">Vi ønsker velkommen alle som vil lære om den tiden vi nå lever i, hente motivasjon til kampen for fellesskapet og samles med likesinnede.</p>
+            
+            <p style="margin-top: 20px;"><em>Detaljert program kommer snart!</em></p>
+        </section>
+        
+        <!-- Tid og Sted -->
+        <section id="tid-sted" class="tab-content">
+            <h2>Tid og Sted</h2>
+            
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+            
+            <h3>Lokasjon</h3>
+            <p>Kubaparken<br>
+            Oslo</p>
+            
+            <h3 style="margin-top: 20px;">Hvordan komme dit</h3>
+            <p><strong>Med kollektivtransport:</strong><br>
+            Se ruter.no for kollektivtransport til Kubaparken.</p>
+        </section>
+        
+        <!-- Kontaktside -->
+        <section id="kontakt" class="tab-content">
+            <h2>Kontakt Oss</h2>
+            
+            <p>Vil din organisasjon stille seg bak? Ta kontakt!</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 30px;">
+                <div>
+                    <h3>Send melding</h3>
+                    <form id="contact-form" style="margin-top: 15px;">
+                        <input type="text" placeholder="Ditt navn" required>
+                        <input type="email" placeholder="Din e-post" required>
+                        <input type="text" placeholder="Organisasjon">
+                        <textarea placeholder="Din melding" required></textarea>
+                        <button type="submit">Send melding</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Om Festivalen -->
+        <section id="om" class="tab-content">
+            <h2>Om Folkefesten</h2>
+            
+            <div style="margin-bottom: 30px;">
+                <h3>Våre prinsipper:</h3>
+                <p>Vi tar avstand fra fascisme, enhver form for diskriminering av utsatte grupper og undergraving av konstitusjonelle og demokratiske rettigheter og spilleregler. Vi vil på ulikt vis bidra til et levende demokratisk samfunn, med et sunt uenighetsfellesskap, hvor alle har lik rett til å delta.</p>
+                
+                <p style="margin-top: 15px;">Med folkefesten vil vi forsvare, og vise at vi er mange som mener at alle mennesker er like mye verdt. Vi vil gi folk handlingsalternativ mot fascismen og gi styrke til en fellesskapsorientert motkraft!</p>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3>Om arrangørene:</h3>
+                <p>Vi som arrangerer har bakgrunn fra solidaritet-, miljø-, menneskerett- og studentorganisasjoner. Vi henter støtte fra en rekke organisasjoner og en bredde i fagbevegelsen.</p>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3>Tilsluttede organisasjoner:</h3>
+                <ul style="margin-left: 20px;">
+                    <li>NtL</li>
+                    <li>HK Norge</li>
+                    <li>Spire</li>
+                    <li>SAIH</li>
+                    <li>Changemaker</li>
+                    <li>Framtiden i våre hender</li>
+                    <li>Natur og ungdom</li>
+                    <li>Greenpeace</li>
+                    <li>Redd barna</li>
+                </ul>
+            </div>
+            
+            <div>
+                <p>Vi lever ikke i en mørk tid, vi lever i en brytningstid, alt avhenger av de valgene vi nå tar fremover. Om hvordan vi skal komme sammen og styrke fellesskapet.</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Folkefesten mot fascisme. Alle rettigheter reservert.</p>
+        </div>
+    </footer>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hent alle nødvendige elementer
+        const tabLinks = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+        let map;
+
+        // Funksjon for å vise aktiv tab og skjule andre
+        function setActiveTab(activeTabId) {
+            // Fjern aktiv klasse fra alle tabs og skjul innhold
+            tabLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
+
+            // Sett aktiv klasse på valgt tab og vis innhold
+            const activeTab = document.getElementById(activeTabId);
+            const activeLink = document.querySelector(`[data-tab="${activeTabId}"]`);
+            
+            if (activeTab && activeLink) {
+                activeTab.classList.add('active');
+                activeTab.style.display = 'block';
+                activeLink.classList.add('active');
+
+                // Hvis kartet er i den aktive tabben, oppdater det
+                if (activeTabId === 'tid-sted' && map) {
+                    setTimeout(() => {
+                        map.invalidateSize();
+                    }, 200);
+                }
+            }
+        }
+
+        // Legg til click event listeners på alle tab-linker
+        tabLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('data-tab');
+                setActiveTab(tabId);
+
+                // Scroll til toppen av innholdet
+                window.scrollTo({
+                    top: document.querySelector('main').offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Håndter kontaktskjema
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Takk for din henvendelse! Vi vil kontakte deg så snart som mulig.');
+                contactForm.reset();
+            });
+        }
+
+        // Håndter URL hash for direkte lenker til tabs
+        function handleHash() {
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                setActiveTab(hash);
+            } else {
+                setActiveTab('hjem'); // Standard tab hvis ingen hash
+            }
+        }
+
+        // Lytt på hash endringer
+        window.addEventListener('hashchange', handleHash);
+
+        // Initialiser kartet
+        const mapElement = document.getElementById('map');
+        if (mapElement) {
+            map = L.map('map').setView([59.923954, 10.752496], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            L.marker([59.923954, 10.752496]).addTo(map)
+                .bindPopup('Kubaparken')
+                .openPopup();
+        }
+
+        // Håndter initial visning
+        handleHash();
+
+        // Sett opp smooth scroll for alle interne lenker
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
