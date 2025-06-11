@@ -40,7 +40,7 @@
         
         /* Header med banner bilde */
         header {
-            background-color: #ffddda;
+            background-color: var(--color-cream);
             padding: 40px 0;
             text-align: center;
             position: relative;
@@ -57,6 +57,8 @@
             width: 100%;
             height: auto;
             display: block;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         .main-banner {
@@ -141,6 +143,35 @@
             text-transform: uppercase;
         }
 
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
+            padding: 20px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            min-width: 250px;
+        }
+
+        .cta-button:hover {
+            background-color: var(--color-white);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
         /* Kart seksjon */
         .location-section {
             background-color: var(--color-white);
@@ -193,20 +224,6 @@
             padding: 30px 40px;
         }
 
-        .footer-contact {
-            margin-top: 10px;
-        }
-
-        .footer-contact a {
-            color: var(--color-light-pink);
-            text-decoration: none;
-            margin: 0 5px;
-        }
-
-        .footer-contact a:hover {
-            text-decoration: underline;
-        }
-
         /* Responsivt design */
         @media (max-width: 768px) {
             .banner-container {
@@ -224,6 +241,15 @@
             .location-section,
             .organizations-section {
                 padding: 25px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-button {
+                min-width: auto;
+                width: 100%;
             }
 
             .org-grid {
@@ -277,6 +303,10 @@
         <section class="cta-section">
             <div class="container">
                 <h2 class="cta-title">Kom og vær med!</h2>
+                <div class="cta-buttons">
+                    <a href="mailto:anjabriise@gmail.com" class="cta-button">Kontakt oss</a>
+                    <a href="#location" class="cta-button">Se tid og sted</a>
+                </div>
                 <p style="font-size: 1.2rem; margin-top: 20px;">
                     <strong>Søndag 22. juni 2025 • Folk i Storgata, Oslo • Gratis inngang</strong>
                 </p>
@@ -334,10 +364,7 @@
     
     <footer>
         <div class="container">
-            <p>&copy; 2025 Fanfare! Fest for fellesskap og mot fascisme.</p>
-            <div class="footer-contact">
-                Kontakt: <a href="mailto:anjabriise@gmail.com">anjabriise@gmail.com</a> og <a href="mailto:hegeskarrud@gmail.com">hegeskarrud@gmail.com</a>
-            </div>
+            <p>&copy; 2025 Fanfare! Fest for fellesskap og mot fascisme. Kontakt: anjabriise@gmail.com og hegeskarrud@gmail.com</p>
         </div>
     </footer>
 
