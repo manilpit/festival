@@ -40,7 +40,7 @@
         
         /* Header med banner bilde */
         header {
-            background-color: #ffddda;
+            background-color: var(--color-light-pink);
             padding: 40px 0;
             text-align: center;
             position: relative;
@@ -57,6 +57,15 @@
             width: 100%;
             height: auto;
             display: block;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: var(--color-purple);
+            margin: 30px 0 20px 0;
+            font-weight: 600;
         }
 
         .main-banner {
@@ -68,7 +77,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             border-radius: 0;
-            margin-top: 30px;
+            margin-bottom: 40px;
         }
         
         /* Hovedinnhold */
@@ -95,6 +104,29 @@
             color: var(--color-red);
         }
 
+        /* Vi krever seksjon */
+        .demands-section {
+            background-color: var(--color-cream);
+            padding: 40px;
+            margin-bottom: 0;
+        }
+
+        .demands-title {
+            font-size: 2rem;
+            color: var(--color-dark);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .demand-item {
+            background-color: var(--color-white);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--color-purple);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
         /* Info bokser */
         .info-section {
             background-color: var(--color-light-pink);
@@ -115,16 +147,6 @@
             margin-bottom: 20px;
         }
 
-        .info-text a {
-            color: var(--color-purple);
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .info-text a:hover {
-            text-decoration: underline;
-        }
-
         /* Call to action */
         .cta-section {
             background-color: var(--color-purple);
@@ -139,6 +161,35 @@
             font-weight: 900;
             margin-bottom: 30px;
             text-transform: uppercase;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
+            padding: 20px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            min-width: 250px;
+        }
+
+        .cta-button:hover {
+            background-color: var(--color-white);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         /* Kart seksjon */
@@ -193,22 +244,12 @@
             padding: 30px 40px;
         }
 
-        .footer-contact {
-            margin-top: 10px;
-        }
-
-        .footer-contact a {
-            color: var(--color-light-pink);
-            text-decoration: none;
-            margin: 0 5px;
-        }
-
-        .footer-contact a:hover {
-            text-decoration: underline;
-        }
-
         /* Responsivt design */
         @media (max-width: 768px) {
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+
             .banner-container {
                 padding: 0 10px;
             }
@@ -219,11 +260,21 @@
             }
 
             .content-section,
+            .demands-section,
             .info-section,
             .cta-section,
             .location-section,
             .organizations-section {
                 padding: 25px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-button {
+                min-width: auto;
+                width: 100%;
             }
 
             .org-grid {
@@ -242,6 +293,7 @@
     <header>
         <div class="banner-container">
             <img src="assets/fanfare_banner.jpeg" alt="FANFARE - Fellesskap mot fascisme">
+            <p class="hero-subtitle">FELLESSKAP MOT FASCISME</p>
             <div class="main-banner">FOLKEFEST FOR DEMOKRATIET</div>
         </div>
     </header>
@@ -251,24 +303,48 @@
         <section class="content-section">
             <div class="container">
                 <p class="intro-text">
-                    <span class="strong-text">Fanfare! Fest for fellesskap, mot fascisme!</span> lages for å skape en arena og samlingspunkt for motstanden og protesten mot framveksten av og økende angrep fra autoritære krefter som river vekk frihet og rettigheter fra egen og andres befolkning, som i USA og Europa. Men også en fest for å feire det rike mangfoldet og fellesskapet vi har og må ta vare på. Vi mener at det å minne om hva det er vi kjemper for er vårt viktigste middel mot fascismen.
+                    <span class="strong-text">Sterke fellesskap er limet for et godt samfunn.</span> Fellesskapet vårt er under press nå som høyreradikale, antidemokratiske krefter er på fremvekst i verden. De har fått fotfeste i parlamenter og presidentstoler i flere land, ideene forerer i ulike grupperinger og på digitale plattformer.
                 </p>
                 <p class="intro-text">
-                    Dagen vil fylles med musikk, foredrag, standup, panelsamtaler, poesi, live podcast, kunst, ansiktsmaling, god mat, art build og morsomme aktiviteter for barna.
+                    Vi ser tydelige likhetstrekk internasjonalt mellom hendelser fra 1930-tallets framvekst av fascismen og det som skjer i dag, hvor noen få gradvis tar makt og frihet fra fellesskapet.
                 </p>
                 <p class="intro-text">
-                    Oppdatert program ligger på <a href="https://facebook.com/events/s/fanfare-2025/1398873374860916/" target="_blank">facebook-eventet</a><br>
-                    Følg oss på <a href="https://www.instagram.com/fanfarefestforfellesskap?igsh=MTdiNGlidWhnNGZ4Nw==" target="_blank">instagram</a>
+                    <span class="strong-text">Fanfare! Fest for felleskap og mot fascisme</span> lages for å skape en arena og samlingspunkt for motstanden mot framveksten av og økende angrep fra autoritære fascistiske krefter. Men også for å feire det rike mangfoldet og fellesskapet vi har.
                 </p>
             </div>
         </section>
 
-        <!-- Våre prinsipper seksjon -->
+        <!-- Våre krav seksjon -->
+        <section class="demands-section">
+            <div class="container">
+                <h2 class="demands-title">Vi krever at:</h2>
+                <div class="demand-item">
+                    samfunnet vårt forsvarer demokratiske verdier og menneskerettigheter mot alle former for fascisme og autoritarisme.
+                </div>
+                <div class="demand-item">
+                    vi styrker fellesskapet gjennom kulturelle uttrykk, dialog og sammenholdende aktiviteter.
+                </div>
+                <div class="demand-item">
+                    vi skaper en arena hvor alle kan delta i å forme et mer rettferdig samfunn.
+                </div>
+                <div class="demand-item">
+                    vi lærer av historien for å unngå å gjenta de samme feilene fra fortiden.
+                </div>
+            </div>
+        </section>
+
+        <!-- Om festivalen -->
         <section class="info-section">
             <div class="container">
-                <h3 class="info-title">Våre prinsipper</h3>
+                <h3 class="info-title">Hva er Fanfare! Fest for felleskap og mot fascisme?</h3>
                 <p class="info-text">
-                    Vi tar avstand fra fascisme, enhver form for diskriminering av utsatte grupper og undergraving av konstitusjonelle og demokratiske rettigheter og spilleregler. Vi vil på ulikt vis bidra til et levende demokratisk samfunn, med et sunt uenighetsfellesskap, hvor alle har lik rett til å delta. Med folkefesten vil vi forsvare, og vise at vi er mange som mener at alle mennesker er like mye verdt. Vi vil gi folk handlingsalternativ mot fascismen og gi styrke til en fellesskapsorientert motkraft!
+                    Fanfare! er en folkefest som samler mennesker for å feire demokratiet og fellesskapet. Festivalen har som mål å skape et sterkt motstandsnettverk mot fascistiske krefter gjennom kultur, samtale og fellesskap.
+                </p>
+                <p class="info-text">
+                    Det blir en dag fylt med samtaler med noen av våre skarpeste hoder - på tvers av politiske skillelinjer og fagfelt, musikk, standup, workshops, og aktiviteter for store og små.
+                </p>
+                <p class="info-text">
+                    Vi tar avstand fra fascisme, enhver form for diskriminering av utsatte grupper og undergraving av konstitusjonelle og demokratiske rettigheter og spilleregler.
                 </p>
             </div>
         </section>
@@ -277,8 +353,12 @@
         <section class="cta-section">
             <div class="container">
                 <h2 class="cta-title">Kom og vær med!</h2>
+                <div class="cta-buttons">
+                    <a href="mailto:kontakt@fanfare.no" class="cta-button">Kontakt oss</a>
+                    <a href="#location" class="cta-button">Se tid og sted</a>
+                </div>
                 <p style="font-size: 1.2rem; margin-top: 20px;">
-                    <strong>Søndag 22. juni 2025 • Folk i Storgata, Oslo • Gratis inngang</strong>
+                    <strong>15. Juni 2025 • Kubaparken, Oslo • Gratis inngang</strong>
                 </p>
             </div>
         </section>
@@ -288,14 +368,14 @@
             <div class="container">
                 <h3 class="info-title">Tid og Sted</h3>
                 <p class="info-text">
-                    <strong>Dato:</strong> Søndag 22. juni 2025<br>
-                    <strong>Tid:</strong> 12:00 - 19:00<br>
-                    <strong>Sted:</strong> Folk i Storgata, Oslo<br>
+                    <strong>Dato:</strong> 15. Juni 2025<br>
+                    <strong>Tid:</strong> 11:00 - 22:00<br>
+                    <strong>Sted:</strong> Kubaparken, Oslo<br>
                     <strong>Inngang:</strong> Gratis for alle
                 </p>
                 <div id="map"></div>
                 <p class="info-text">
-                    <strong>Kollektivtransport:</strong> Se ruter.no for kollektivtransport til Folk i Storgata
+                    <strong>Kollektivtransport:</strong> Se ruter.no for kollektivtransport til Kubaparken
                 </p>
             </div>
         </section>
@@ -305,28 +385,18 @@
             <div class="container">
                 <h3 class="info-title">Tilsluttede organisasjoner</h3>
                 <div class="org-grid">
-                    <div class="org-item">Antirasistisk senter</div>
-                    <div class="org-item">Aksjonsgruppa for Palestina</div>
-                    <div class="org-item">Attac</div>
-                    <div class="org-item">Changemaker</div>
-                    <div class="org-item">Fagforbundet Oslo</div>
-                    <div class="org-item">Framtiden i våre hender</div>
-                    <div class="org-item">Forum for utvikling og miljø</div>
-                    <div class="org-item">Greenpeace</div>
+                    <div class="org-item">NtL</div>
                     <div class="org-item">HK Norge</div>
-                    <div class="org-item">Latin-amerikagruppene i Norge (LAG)</div>
-                    <div class="org-item">Natur og ungdom</div>
-                    <div class="org-item">Norsk Folkehjelp Solidaritetsungdom</div>
-                    <div class="org-item">Norsk tjenestemannslag (NtL)</div>
-                    <div class="org-item">Palestinakomiteen</div>
-                    <div class="org-item">Press -- Redd Barna Ungdom</div>
-                    <div class="org-item">Redd barna</div>
-                    <div class="org-item">SAIH</div>
                     <div class="org-item">Spire</div>
-                    <div class="org-item">Utdanningsforbundet Oslo</div>
+                    <div class="org-item">SAIH</div>
+                    <div class="org-item">Changemaker</div>
+                    <div class="org-item">Framtiden i våre hender</div>
+                    <div class="org-item">Natur og ungdom</div>
+                    <div class="org-item">Greenpeace</div>
+                    <div class="org-item">Redd barna</div>
                 </div>
                 <p class="info-text" style="margin-top: 30px; text-align: center; font-style: italic;">
-                    Vil din organisasjon slutte seg til? Send en e-post til <a href="mailto:anjabriise@gmail.com">anjabriise@gmail.com</a>
+                    Vil din organisasjon slutte seg til? Send en e-post til <a href="mailto:kontakt@fanfare.no" style="color: var(--color-purple); font-weight: bold;">kontakt@fanfare.no</a>
                 </p>
             </div>
         </section>
@@ -334,27 +404,24 @@
     
     <footer>
         <div class="container">
-            <p>&copy; 2025 Fanfare! Fest for fellesskap og mot fascisme.</p>
-            <div class="footer-contact">
-                Kontakt: <a href="mailto:anjabriise@gmail.com">anjabriise@gmail.com</a> og <a href="mailto:hegeskarrud@gmail.com">hegeskarrud@gmail.com</a>
-            </div>
+            <p>&copy; 2025 Fanfare! Fest for felleskap og mot fascisme. Kontakt: kontakt@fanfare.no</p>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialiser kartet med koordinater for Folk i Storgata
+            // Initialiser kartet
             const mapElement = document.getElementById('map');
             if (mapElement) {
-                const map = L.map('map').setView([59.913868, 10.752245], 15);
+                const map = L.map('map').setView([59.923954, 10.752496], 13);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map);
 
-                L.marker([59.913868, 10.752245]).addTo(map)
-                    .bindPopup('Folk i Storgata - Fanfare! Fest for fellesskap og mot fascisme')
+                L.marker([59.923954, 10.752496]).addTo(map)
+                    .bindPopup('Kubaparken - Fanfare! Fest for felleskap og mot fascisme')
                     .openPopup();
             }
 
